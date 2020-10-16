@@ -4,7 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 const fileUpload = require('express-fileupload');
 const cors = require('cors')
 const bodyParser = require('body-parser');
-const  ObjectId  = require('mongodb').ObjectId;
+const ObjectId = require('mongodb').ObjectId;
 const port = 5000
 
 // middleware 
@@ -52,7 +52,7 @@ client.connect(err => {
 
     // fetch all service from database (get method)
     app.get('/services', (req, res) => {
-        serviceCollection.find({})
+        serviceCollection.find({}).limit(6)
             .toArray((err, documents) => {
                 res.send(documents);
             })
@@ -69,7 +69,7 @@ client.connect(err => {
 
     // feedback get method
     app.get('/feedbacks', (req, res) => {
-        feedbackCollection.find({})
+        feedbackCollection.find({}).limit(6)
             .toArray((err, documents) => {
                 res.send(documents);
             })
@@ -128,16 +128,16 @@ client.connect(err => {
     })
 
     app.patch('/update/:id', (req, res) => {
-        customerOrdersCollection.updateOne({_id: ObjectId(req.params.id)},
+        customerOrdersCollection.updateOne({ _id: ObjectId(req.params.id) },
             {
-                $set: {status: req.body.status}
+                $set: { status: req.body.status }
             })
             .then(result => {
                 res.send(result.modifiedCount > 0)
             })
     })
 
-    console.log('database connected');
+    console.log('connected');
 });
 
 app.listen(process.env.PORT || port, () => {
